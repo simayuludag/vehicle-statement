@@ -1,6 +1,7 @@
 """
 Sinyal Doğrulama (Validation) Kuralları
 """
+import math
 from vehicle_simulator.constants import (
     MAX_COOLANT_TEMP_C,
     MAX_ENGINE_RPM,
@@ -12,7 +13,15 @@ from vehicle_simulator.constants import (
     MIN_SPEED_KPH,
 )
 
-
+def _ensure_finite(signal_name: str, value: float | int) -> None:
+    """Değerin NaN veya sonsuzluk olmadığını doğrular."""
+    if not isinstance(value, (int, float)) or isinstance(value, bool):
+        raise TypeError(f"{signal_name} sayısal (int veya float) bir değer olmalıdır.")
+    if not math.isfinite(value):
+        raise ValueError(
+            f"Geçersiz sayısal değer: {signal_name} için '{value}' kabul edilemez. "
+            f"Değer sonlu bir sayı olmalıdır."
+        )
 def validate_speed(speed: float) -> None:
     """
     Parametreler: speed (float) - Araç hızı.

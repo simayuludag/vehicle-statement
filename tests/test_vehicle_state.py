@@ -119,3 +119,23 @@ def test_post_modification_validation():
 
     with pytest.raises(ValueError, match="Geçersiz hız değeri"):
         state.validate()
+@pytest.mark.parametrize("invalid_val", [float("nan"), float("inf"), float("-inf")])
+def test_non_finite_values_raise_value_error(invalid_val):
+    """NaN ve sonsuzluk değerlerinin tüm alanlarda ValueError ürettiğini test eder."""
+    with pytest.raises(ValueError, match="speed_kph"):
+        VehicleState(speed_kph=invalid_val)
+
+    with pytest.raises(ValueError, match="engine_rpm"):
+        VehicleState(ignition_on=True, engine_running=True, engine_rpm=invalid_val)  # type: ignore
+
+    with pytest.raises(ValueError, match="coolant_temp_c"):
+        VehicleState(coolant_temp_c=invalid_val)
+
+    with pytest.raises(ValueError, match="fuel_percent"):
+        VehicleState(fuel_percent=invalid_val)
+
+    with pytest.raises(ValueError, match="throttle_percent"):
+        VehicleState(throttle_percent=invalid_val)
+
+    with pytest.raises(ValueError, match="brake_percent"):
+        VehicleState(brake_percent=invalid_val)
