@@ -59,7 +59,10 @@ class VehicleState:
         # 2. Mantıksal Durum İlişkisi
         if not self.ignition_on and self.engine_running:
             raise ValueError("Kontak kapalıyken (ignition_on=False) motor çalışamaz.")
-
+        if not self.engine_running and self.engine_rpm > MIN_ENGINE_RPM:
+            raise ValueError(
+                f"Motor çalışmıyorken (engine_running=False) motor devri {self.engine_rpm} RPM olamaz."
+            )
         # 3. Sayısal Sinyal Validasyonları
         validate_speed(self.speed_kph)
         validate_rpm(self.engine_rpm)

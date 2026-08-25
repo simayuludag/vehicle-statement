@@ -58,11 +58,17 @@ def test_invalid_speed_raises_value_error():
 
 def test_invalid_rpm_raises_value_error():
     """Motor devri sınırları aşıldığında ValueError fırlatıldığını test eder."""
+    # Maksimum RPM aşımı (motor çalışırken)
     with pytest.raises(ValueError, match="Geçersiz motor devri"):
-        VehicleState(engine_rpm=MAX_ENGINE_RPM + 1)
+        VehicleState(
+            ignition_on=True, engine_running=True, engine_rpm=MAX_ENGINE_RPM + 1
+        )
 
+    # Minimum RPM altı (negatif devir)
     with pytest.raises(ValueError, match="Geçersiz motor devri"):
-        VehicleState(engine_rpm=-50)
+        VehicleState(
+            ignition_on=True, engine_running=True, engine_rpm=MIN_ENGINE_RPM - 1
+        )
 
 
 def test_invalid_coolant_temp_raises_value_error():
@@ -101,6 +107,10 @@ def test_invalid_type_raises_type_error():
     with pytest.raises(TypeError, match="engine_running alanı bool tipinde olmalıdır"):
         VehicleState(engine_running=1)  # type: ignore
 
+def test_engine_stopped_with_positive_rpm_raises_value_error():
+    """Motor çalışmıyorken devrin sıfırdan büyük olamayacağını doğrular."""
+    with pytest.raises(ValueError, match="Motor çalışmıyorken .* motor devri .* olamaz"):
+        VehicleState(ignition_on=True, engine_running=False, engine_rpm=1200)
 
 def test_post_modification_validation():
     """Mevcut bir nesnenin alanı sonradan bozulduğunda validate() metodunun yakaladığını test eder."""
