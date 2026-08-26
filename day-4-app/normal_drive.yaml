@@ -1,0 +1,53 @@
+metadata:
+  scenario: "Normal Drive Simulation Cycle"
+  cycle_frequency_hz: 10
+  description: "Kontak acma, motor calistirma, hizlanma, seyir, fren, durma ve stop etme senaryosu."
+
+steps:
+  # 0.0s - 1.0s: Kontak Açık Bekleme
+  - timestamp: 0.0
+    ignition: true
+    start_button: false
+    throttle: 0.0
+    brake: 0.0
+    gear: "P"
+
+  # 1.0s - 2.0s: Frene Basarak Marş Basma
+  - timestamp: 1.0
+    ignition: true
+    start_button: true
+    throttle: 0.0
+    brake: 30.0
+    gear: "P"
+
+  # 2.0s - 5.0s: Vites D, Gaz Verme ve Hızlanma
+  - timestamp: 2.0
+    ignition: true
+    start_button: false
+    throttle: 45.0
+    brake: 0.0
+    gear: "D"
+
+  # 5.0s - 8.0s: Sabit Hız Seyri
+  - timestamp: 5.0
+    ignition: true
+    start_button: false
+    throttle: 12.0
+    brake: 0.0
+    gear: "D"
+
+  # 8.0s - 11.0s: Frenleme ve Yavaşlama
+  - timestamp: 8.0
+    ignition: true
+    start_button: false
+    throttle: 0.0
+    brake: 40.0
+    gear: "D"
+
+  # 11.0s - 13.0s: Durma, Park Konumu ve Kontak Kapatma
+  - timestamp: 11.0
+    ignition: false
+    start_button: false
+    throttle: 0.0
+    brake: 100.0
+    gear: "P"
